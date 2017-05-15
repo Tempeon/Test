@@ -1,6 +1,7 @@
 import {connect} from 'react-redux'
 import StartTest from '../components/StartTest'
-import {SaveRezultTest, IncrementQuestion} from '../action'
+import {SaveRezultTest, IncrementQuestion, DecrementTimer} from '../action'
+import {withRouter} from 'react-router'
 
 
 const mapStateToProps = (state) => {
@@ -15,15 +16,16 @@ const mapDispatch = (dispatch) => {
         dispatch(SaveRezultTest(idQuestion, idAnswer, count))
         dispatch(IncrementQuestion())
     },
-    incrementQuestion: () => {
-      
+    decrementTimer: ()=>{
+      dispatch(DecrementTimer())
     }
+
   }
 }
 
-const PropsTest = connect(
+const PropsTest = withRouter(connect(
   mapStateToProps,
   mapDispatch
-)(StartTest)
+)(StartTest))
 
 export default PropsTest

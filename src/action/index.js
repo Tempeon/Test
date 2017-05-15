@@ -8,3 +8,7 @@ export  const SaveRezultTest = (idQuestion, idAnswer, count) => ({
 export const IncrementQuestion = () => ({
   type: 'INCREMENT_QUESTION'
 })
+
+export const DecrementTimer = () => ({
+  type: 'DECREMENT_TIMER'
+})

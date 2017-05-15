@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import Timer from './Timer'
+import { withRouter } from 'react-router'
 
 
 class Test extends Component  {
@@ -15,20 +16,38 @@ class Test extends Component  {
     this.startTimer = this.startTimer.bind(this)
   }
 
-  next(saveRezultTests){
-    saveRezultTests(this.state.idQuestion, this.state.idAnswer, this.state.count); //count
-    this.setState({idAnswer: null,})
+  next(questionid){
+    const {saveRezultTests, decrementTimer} = this.props
+    saveRezultTests(this.state.idQuestion || questionid, this.state.idAnswer, this.state.count); //count
+    this.setState({idAnswer: null, idQuestion: null})
+    clearInterval(this.Timer);
+    this.startTimer()
   }
     componentDidMount() { 
     this.startTimer()
   } 
 
   startTimer(){
-    this.Timer = setTimeout(console.log('x'), 1000)
+    const {decrementTimer, params, history} = this.props
+    console.log(history)
+    this.Timer = setInterval(()=>decrementTimer(), 1000)
+
+    //history.push('/rezult')
   }
-  /*componentWillUnmount() { 
-    clearInterval(this.timerId); 
-  } */
+  componentWillUnmount() { 
+    clearInterval(this.Timer); 
+    
+  } 
+
+  componentWillReceiveProps(nextProps){
+    const {params, questionTest} = this.props
+    if(params.time == 0){
+      console.log('next')
+      this.next(questionTest[params.count].id)
+      //this.startTimer()
+      }
+
+  }
 /*previous(){
   this.setState({count: this.state.count-1}) //count
 }*/
@@ -49,9 +68,11 @@ handleChange(id, q){
 
 
   render(){
-    const {questionTest, saveRezultTests, params} = this.props
+    const {questionTest, saveRezultTests, params, } = this.props
+        /**/
     return(
       <div>
+      {params.time}
         <div>
           {params.count+1}  - 
           {questionTest[params.count].title}
@@ -79,7 +100,7 @@ handleChange(id, q){
         </ul>
         <span onClick={()=> this.previous()}> Back </span>
         {(params.count !== 9)?
-          <span onClick={()=> {this.next(saveRezultTests); }}> Next </span>:
+          <span onClick={()=> this.next(questionTest[params.count].id) }> Next </span>:
           <span onClick={()=> {saveRezultTests(questionTest[params.count].id, this.state.idAnswer, params.count);}}><Link to={'/rezult'}>Finish&Save</Link></span>
         }
       </div>

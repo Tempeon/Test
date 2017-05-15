@@ -13,7 +13,7 @@ class StartTest extends Component  {
     this.setState({start: !this.state.start})
   }
   render(){
-    const {questionTest, saveRezultTests, params} = this.props
+    const {questionTest, saveRezultTests, params, decrementTimer} = this.props
     return(
       <div>
         {!this.state.start ?
@@ -27,6 +27,7 @@ class StartTest extends Component  {
           questionTest={questionTest}
           saveRezultTests={saveRezultTests}
           params={params}
+          decrementTimer={decrementTimer}
           />
         }
       </div>
